@@ -10,6 +10,8 @@ from discord import app_commands
 discord.utils.setup_logging()
 LOGGER = logging.getLogger(__name__)
 
+MY_GUILD = discord.Object(id=0)  # replace with your guild id
+
 
 class NopeClient(discord.Client):
     # Suppress error on the User attribute being None since it fills up later
@@ -26,8 +28,12 @@ class NopeClient(discord.Client):
         # maintain its own tree instead.
         self.tree = app_commands.CommandTree(self)
 
+    # In this basic example, we just synchronize the app commands to one guild.
+    # Instead of specifying a guild to every command, we copy over our global commands instead.
+    # By doing so, we don't have to wait up to an hour until they are shown to the end-user.
     async def setup_hook(self):
-        # Sync global commands. Will take up to an hour until they are shown to the end-user.
+        # This copies the global commands over to your guild.
+        self.tree.copy_global_to(guild=MY_GUILD)
         await self.tree.sync()
 
 
