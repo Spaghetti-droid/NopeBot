@@ -34,7 +34,7 @@ class NopeClient(discord.Client):
     async def setup_hook(self):
         # This copies the global commands over to your guild.
         self.tree.copy_global_to(guild=MY_GUILD)
-        await self.tree.sync()
+        await self.tree.sync(guild=MY_GUILD)
 
 
 intents = discord.Intents.default()
