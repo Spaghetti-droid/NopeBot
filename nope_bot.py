@@ -49,13 +49,23 @@ async def hello(interaction: discord.Interaction):
     await interaction.response.send_message(f'Hi, {interaction.user.mention}')
 
 @client.tree.command()
+async def no(interaction: discord.Interaction):
+    """Loudly add a Nope"""
+    add_nope(interaction.guild_id)
+    await interaction.response.send_message(f'{interaction.user.mention} has added a Nope! 😱')
+
+@client.tree.command()
 async def nope(interaction: discord.Interaction):
-    """Add a Nope"""
-    global nopes_per_guild
-    nopes = nopes_per_guild.get(interaction.guild_id, 0)
-    nopes += 1
-    nopes_per_guild[interaction.guild_id] = nopes
+    """Silently add a Nope"""
+    add_nope(interaction.guild_id)
     await interaction.response.send_message('Nope added 🥲', ephemeral=True)
+
+def add_nope(guild_id: int|None) -> None:
+    """Add a nope for the guild with the provided ID"""
+    global nopes_per_guild
+    nopes = nopes_per_guild.get(guild_id, 0)
+    nopes += 1
+    nopes_per_guild[guild_id] = nopes 
 
 @client.tree.command()
 async def count(interaction: discord.Interaction):
